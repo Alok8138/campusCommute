@@ -1,22 +1,13 @@
-// const mongoose = require("mongoose");
 
-// // Schema for individual bus details
-// const busSchema = new mongoose.Schema({
-//   Bus_no: { type: String, required: true },
-//   Deport_time: { type: String, required: true },
-//   Source: { type: String, required: true },
-//   Destination: { type: String, required: true },
-// });
+const mongoose = require("mongoose");
 
-// // Schema for city-wise bus schedules
-// const busScheduleSchema = new mongoose.Schema({
-//   city: { type: String, required: true, unique: true },
-//   buses: { type: [busSchema], required: true }, 
-// });
+const busSchema = new mongoose.Schema({
+  busNumber: String,
+  source: String,
+  destination: String,
+  city: String,
+  departureTime: String,
+  arrivalTime: String,
+});
 
-
-// const BusSchedule =
-//   mongoose.models.BusSchedule ||
-//   mongoose.model("BusSchedule", busScheduleSchema);
-
-// module.exports = BusSchedule;
+module.exports = mongoose.model("Bus", busSchema);

@@ -8,7 +8,7 @@ const { userAuth } = require("./src/middleware/auth")
 
 const authRouter = require("./src/routes/auth")
 const profileRouter = require("./src/routes/profile")
-// const adminRoutes = require("./src/routes/adminRoutes");
+const adminRoutes = require("./src/routes/admin");
 const app = express();
 const cors = require("cors")
 
@@ -32,7 +32,7 @@ app.use(cookieParser());
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
-// app.use("/", adminRoutes);
+app.use("/", adminRoutes);
 // app.use("/", requestRouter);
 // app.use("/", userRouter);
 // app.use("/", paymentRouter);

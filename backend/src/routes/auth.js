@@ -9,13 +9,7 @@ const bcrypt = require("bcrypt");
 
 
 authRouter.post("/signup", async (req, res) => {
-  // const user = new User({
-  //   name: "Dharmik",
-  //   email: "dharmik@gmail.com",
-  //   enrollment: "22012011131",
-  //   password: "dharmik@123"
-  // }
-  //   console.log(req.body);
+
 
   const user = new User(req.body);
 
