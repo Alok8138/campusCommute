@@ -1,19 +1,3 @@
-// const express = require("express");
-// const profileRouter = express.Router();
-
-// const { userAuth } = require("../middleware/auth");
-// const { validateEditProfileData } = require("../util/signup.user.validation");
-
-
-
-
-
-
-
-
-
-
-
 
 const express = require("express");
 const multer = require("multer");
@@ -47,7 +31,7 @@ const upload = multer({
       cb(new Error("Only image files are allowed!"), false);
     }
   },
-  limits: { fileSize: 1024 * 1024 * 2 }, // Limit file size to 2MB
+  limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
 });
 
 
