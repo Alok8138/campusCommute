@@ -11,6 +11,8 @@ import { Provider } from "react-redux"
 import appStore from './utils/appStore';
 import Homepage from './pages/Homepage';
 import Body from './pages/Body';
+import About from './pages/About';
+
 const App = () => {
   return (
     // <Navbar/>
@@ -29,6 +31,7 @@ const App = () => {
             <Route path="/" element={<Homepage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/about" element={<About />} />
           </Route>
         </Routes>
       </BrowserRouter>
