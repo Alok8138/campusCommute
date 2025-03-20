@@ -66,14 +66,14 @@ const Login = () => {
               <input
                 type="text"
                 value={name}
-                className="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-2 mb-3 border rounded-lg"
                 onChange={(e) => setName(e.target.value)}
               />
               <label className="block text-gray-700 font-semibold">Email</label>
               <input
                 type="text"
                 value={email}
-                className="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-2 mb-3 border rounded-lg"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </>
@@ -83,7 +83,7 @@ const Login = () => {
           <input
             type="text"
             value={enrollment}
-            className="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 mb-3 border rounded-lg"
             onChange={(e) => setEnrollment(e.target.value)}
           />
 
@@ -91,7 +91,7 @@ const Login = () => {
           <input
             type="password"
             value={password}
-            className="w-full px-4 py-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 mb-3 border rounded-lg"
             onChange={(e) => setPassword(e.target.value)}
           />
 

@@ -12,7 +12,7 @@ const validateSignUpData = (req) => {
 };
 
 const validateEditProfileData = (req) => {
-  const allowedEditFields = ["name", "email", "profileUrl"];
+  const allowedEditFields = ["name", "email","enrollment", "profileUrl"];
 
   const isEditAllowed = Object.keys(req.body).every((field) =>
     allowedEditFields.includes(field)

@@ -13,38 +13,46 @@ const EditProfile = ({ user }) => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const [showToast, setShowToast] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (user.profileUrl && user.profileUrl.data) {
       const binaryData = new Uint8Array(user.profileUrl.data);
-      const blob = new Blob([binaryData], { type: "image/jpg" });
-      const imageUrl = URL.createObjectURL(blob);
-      setPhotoUrl(imageUrl);
+      const blob = new Blob([binaryData], { type: "image/jpeg" });
+      setPhotoUrl(URL.createObjectURL(blob));
     }
   }, [user.profileUrl]);
 
   const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
-    const imageUrl = URL.createObjectURL(e.target.files[0]);
-    setPhotoUrl(imageUrl);
+    const file = e.target.files[0];
+    if (!file) return;
+    setImageFile(file);
+    setPhotoUrl(URL.createObjectURL(file));
   };
 
   const saveProfile = async () => {
     setError("");
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("enrollment", enrollment);
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
     try {
-      const res = await axios.patch(
-        BASE_URL + "/profile/edit",
-        { name, email },
-        { withCredentials: true }
-      );
+      const res = await axios.patch(BASE_URL + "/profile/edit", formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       dispatch(addUser(res?.data?.data));
       setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
-      console.log(err);
-      setError(err.response);
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to update profile.");
     }
   };
 
@@ -52,7 +60,7 @@ const EditProfile = ({ user }) => {
     <div className="flex justify-center my-10">
       <div className="flex justify-center mx-10 bg-gray-100 p-8 rounded-lg shadow-lg w-96">
         <div className="w-full">
-          <h2 className="text-center text-2xl font-bold text-gray-800">Edit Profile</h2>
+          <h2 className="text-center text-2xl font-bold text-gray-800">Profile</h2>
           <div className="relative w-24 h-24 mx-auto my-4">
             <img
               src={photoUrl || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
@@ -75,27 +83,30 @@ const EditProfile = ({ user }) => {
             <input
               type="text"
               value={name}
-              className="w-full p-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              className="w-full p-2 mb-3 border rounded-lg"
               onChange={(e) => setName(e.target.value)}
             />
-            <label className="block text-gray-700 text-sm font-bold mb-1">Email</label>
-            <input
-              type="text"
-              value={email}
-              className="w-full p-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+
             <label className="block text-gray-700 text-sm font-bold mb-1">Enrollment</label>
             <input
               type="text"
               value={enrollment}
-              className="w-full p-2 mb-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              className="w-full p-2 mb-3 border rounded-lg"
               onChange={(e) => setEnrollment(e.target.value)}
+            />
+
+            <label className="block text-gray-700 text-sm font-bold mb-1 opacity-80">Email</label>
+            <input
+              // disabled={true}
+              type="text"
+              value={email}
+              className="w-full p-2 mb-3 border rounded-lg opacity-80"
+            onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <p className="text-red-500 text-center">{error}</p>
           <div className="flex justify-center mt-4">
-            <button className="bg-black text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-700" onClick={saveProfile}>
+            <button className="bg-black text-white px-4 py-2 rounded-lg shadow-md cursor-pointer" onClick={saveProfile}>
               Save Profile
             </button>
           </div>
@@ -110,4 +121,5 @@ const EditProfile = ({ user }) => {
   );
 };
 
-export default EditProfile; 
+export default EditProfile;
+
