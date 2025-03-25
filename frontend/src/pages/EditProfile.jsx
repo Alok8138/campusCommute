@@ -30,6 +30,8 @@ const EditProfile = ({ user }) => {
     setPhotoUrl(URL.createObjectURL(file));
   };
 
+
+
   const saveProfile = async () => {
     setError("");
 
@@ -44,17 +46,90 @@ const EditProfile = ({ user }) => {
     try {
       const res = await axios.patch(BASE_URL + "/profile/edit", formData, {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      dispatch(addUser(res?.data?.data));
+      console.log("Profile Update Response:", res?.data);
+
+      dispatch(addUser(res?.data?.data)); // Update Redux store
       setShowToast(true);
+
+      // Fetch updated user data to ensure session remains active
+      fetchUser();
+
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
-      console.error(err);
+      console.error("Axios Error:", err);
       setError(err.response?.data?.message || "Failed to update profile.");
     }
   };
+
+  // Fetch user after update
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/profile/view", { withCredentials: true });
+      dispatch(addUser(res?.data));
+    } catch (err) {
+      console.error("Failed to fetch user:", err);
+    }
+  };
+
+  // const saveProfile = async () => {
+  //   setError("");
+
+  //   const formData = new FormData();
+  //   formData.append("name", name);
+  //   formData.append("email", email);
+  //   formData.append("enrollment", enrollment); // Ensure this is sent
+  //   if (imageFile) {
+  //     formData.append("image", imageFile);
+  //   }
+
+  //   try {
+  //     const res = await axios.patch(BASE_URL + "/profile/edit", formData, {
+  //       withCredentials: true,
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+
+  //     console.log("Response Data:", res?.data); // Debugging log
+
+  //     dispatch(addUser(res?.data?.data));
+  //     setShowToast(true);
+  //     setTimeout(() => setShowToast(false), 3000);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.response?.data?.message || "Failed to update profile.");
+  //   }
+  // };
+
+
+  // const saveProfile = async () => {
+  //   setError("");
+
+  //   const formData = new FormData();
+  //   formData.append("name", name);
+  //   formData.append("email", email);
+  //   formData.append("enrollment", enrollment);
+  //   if (imageFile) {
+  //     formData.append("image", imageFile);
+  //   }
+
+  //   try {
+  //     const res = await axios.patch(BASE_URL + "/profile/edit", formData, {
+  //       withCredentials: true,
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+
+  //     dispatch(addUser(res?.data?.data));
+  //     setShowToast(true);
+  //     setTimeout(() => setShowToast(false), 3000);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.response?.data?.message || "Failed to update profile.");
+  //   }
+  // };
 
   return (
     <div className="flex justify-center my-10">
@@ -87,21 +162,22 @@ const EditProfile = ({ user }) => {
               onChange={(e) => setName(e.target.value)}
             />
 
-            <label className="block text-gray-700 text-sm font-bold mb-1">Enrollment</label>
+            <label className="block text-gray-700 text-sm font-bold mb-1 opacity-80">Enrollment</label>
             <input
+              disabled={true}
               type="text"
               value={enrollment}
-              className="w-full p-2 mb-3 border rounded-lg"
-              onChange={(e) => setEnrollment(e.target.value)}
+              className="w-full p-2 mb-3 border rounded-lg opacity-80"
+            // onChange={(e) => setEnrollment(e.target.value)}
             />
 
             <label className="block text-gray-700 text-sm font-bold mb-1 opacity-80">Email</label>
             <input
-              // disabled={true}
+              disabled={true}
               type="text"
               value={email}
               className="w-full p-2 mb-3 border rounded-lg opacity-80"
-            onChange={(e) => setEmail(e.target.value)}
+            // onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <p className="text-red-500 text-center">{error}</p>

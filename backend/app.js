@@ -10,7 +10,8 @@ const authRouter = require("./src/routes/auth")
 const profileRouter = require("./src/routes/profile")
 const adminRoutes = require("./src/routes/admin");
 const app = express();
-const cors = require("cors")
+const cors = require("cors");
+const busrouter = require("./src/routes/formRoutes");
 
 
 require("dotenv").config();
@@ -33,6 +34,10 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", adminRoutes);
+app.use("/", busrouter);
+
+
+////////////////////////////////////
 // app.use("/", requestRouter);
 // app.use("/", userRouter);
 // app.use("/", paymentRouter);
@@ -196,7 +201,7 @@ app.use("/", adminRoutes);
 //   }
 // });
 
-
+/////////////////////////////////
 connectDB()
   .then(() => {
     console.log("connection sucessfull");
@@ -208,6 +213,6 @@ connectDB()
     console.error("Connection Failed: ", err);
   });
 
-
+//////////////////////////////////
 
 // http://localhost:8080/WebApplication1_129/calc_129?WSDL
