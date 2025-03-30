@@ -170,13 +170,22 @@
 
 import React, { useState } from "react";
 import { BASE_URL } from "../utils/constants";
+import { useSelector } from 'react-redux'
+
 
 const ApplyPass = () => {
+  const user = useSelector((store) => store.user);
+  const [name, setName] = useState(user?.name || "");
+
+  console.log("User object:", user);
+  console.log("User name:", user?.name);
+  
   const [formData, setFormData] = useState({
+    xzy: user?.name || "",
     srNo: "",
     date: "",
     regNo: "",
-    name: "",
+    name: user?.name || "",
     enrollmentNo: "",
     college: "",
     branch: "",
@@ -193,6 +202,9 @@ const ApplyPass = () => {
     feeAmount: 0,
   });
 
+  console.log("Form data:", formData);
+  console.log("Form data name:", formData.name);
+  console.log("Name state:", name);
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -298,6 +310,8 @@ const ApplyPass = () => {
   //     alert("Server error. Please try again later.");
   //   }
   // };
+
+  
   
 
   return (

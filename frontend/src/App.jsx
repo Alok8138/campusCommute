@@ -14,6 +14,9 @@ import Body from './pages/Body';
 import About from './pages/About';
 import ApplyPass from './pages/ApplyPass';
 import Payment from './pages/Payment';
+// import Admin_Signup from './admin_pages/Admin_Signup';
+import Admin_Home from './admin_pages/Admin_Home';
+import Admin_Login from './admin_pages/Admin_Login';
 
 const App = () => {
   return (
@@ -35,8 +38,14 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
             <Route path="/apply-pass" element={<ApplyPass />} />
-            <Route path="/payment" element={<Payment />} />
+
           </Route>
+          <Route path="/admin/login" element={<Admin_Login />} />
+          {/* <Route path="/admin/signup" element={<Admin_Signup />} /> */}
+          <Route path="/admin/home" element={<Admin_Home />} />
+
+
+
         </Routes>
       </BrowserRouter>
     </Provider>
