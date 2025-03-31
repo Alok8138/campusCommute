@@ -3,10 +3,10 @@ const adminRouter = express.Router();
 const Bus = require("../model/BusSchedule");
 const Admin = require("../model/adminsignup");
 const bcrypt = require('bcrypt');
+const BusPass = require("../model/BusPass")
 
 
 const SECRET_KEY = "Gojo";
-
 
 adminRouter.post("/admin/signup", async (req, res) => {
   try {
@@ -43,42 +43,6 @@ adminRouter.post("/admin/signup", async (req, res) => {
   }
 });
 
-// authRouter.post("/admin", async (req, res) => {
-
-
-//   const user = new Admin(req.body);
-
-//   try {
-//     const { id, password } = req.body;
-//     const passwordHash = await bcrypt.hash(password, 10);
-//     // console.log(passwordHash);
-//     const user = new Admin({
-//       id,
-//       password: passwordHash,
-//     });
-
-//     // function generateOTP() {
-//     //   return Math.floor(1000 + Math.random() * 9000); // Ensures 4-digit OTP
-//     // }
-
-//     // const generatedOtp = generateOTP();
-//     // console.log(generatedOtp);
-
-//     // await user.save();
-//     // if (generatedOtp == userOtp) {
-//     //   // console.log("valid otp");
-
-//     //   res.send("user saved sucessfully");
-//     // }
-//     res.send("user saved sucessfully");
-//   } catch (err) {
-//     // res.status(400).send("user not saved: " + err);
-//     res.status(400).send("Please Login User Already Exist");
-//   }
-// });
-
-
-// Admin Login Route
 
 
 adminRouter.post("/admin/login", async (req, res) => {
@@ -106,47 +70,6 @@ adminRouter.post("/admin/login", async (req, res) => {
     res.status(500).json({ message: "Error logging in: " + err.message });
   }
 });
-// authRouter.post("/admin/login", async (req, res) => {
- 
-//   try {
-//     const admin = req.body;
-//     const findUser = await Admin.findOne({ id: admin.id });
-//     if (!findUser) {
-//       throw new Error("Admin Not Found");
-//     }
-//     console.log(findUser);
-//     const { password } = findUser;
-//     // console.log(findUser.password);
-
-//     // const isPasswordCorrect =  bcrypt.compare(user.password, findUser.password);
-//     const isPasswordCorrect = await findUser.validatePassword(admin.password);
-//     console.log(isPasswordCorrect);
-
-//     // console.log("ispasword: ",isPasswordCorrect);
-//     // console.log(user.password);
-
-//     const token = await findUser.getJWT();
-//     console.log("token_admin: ", token);
-
-//     res.cookie("token_admin", token);
-
-//     bcrypt
-//       .hash(admin.password, findUser.password)
-//       .then(function (isPasswordCorrect) {
-//         //  console.log(isPasswordCorrect);
-//         if (isPasswordCorrect === findUser.password) {
-//           // res.send("login Sucessfull...");
-//           res.send(findUser);
-//         } else {
-//           res.send("Enter Valid Credential");
-//         }
-//       });
-//   } catch (err) {
-//     res.status(400).send("Admin not fetched: " + err);
-//   }
-// });
-
-
 
 
 
@@ -177,23 +100,20 @@ adminRouter.get("/admin/getbuses", async (req, res) => {
 
 
 
-
-
 adminRouter.post("/admin/addbuses", async (req, res) => {
   try {
-    const { busNumber, source, destination, city, departureTime, arrivalTime } =
-      req.body;
+    const { busNumber, source, destination, city, departureTime, arrivalTime } = req.body;
 
     // Validate required fields
-    if (
-      !busNumber ||
-      !source ||
-      !destination ||
-      !city ||
-      !departureTime ||
-      !arrivalTime
-    ) {
+    if (!busNumber || !source || !destination || !city || !departureTime || !arrivalTime) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Validate that departureTime and arrivalTime are in correct format (HH:mm)
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!timeRegex.test(departureTime) || !timeRegex.test(arrivalTime)) {
+      return res.status(400).json({ message: "Invalid time format. Use HH:mm (e.g., 08:30)" });
     }
 
     const newBus = new Bus({
@@ -206,11 +126,140 @@ adminRouter.post("/admin/addbuses", async (req, res) => {
     });
 
     await newBus.save();
-    res.status(201).send("your bus saved sucessfully!");
+    res.status(201).send("Your bus was saved successfully!");
   } catch (error) {
     console.error("Error creating new bus entry:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+
+
+// adminRouter.post("/admin/addbuses", async (req, res) => {
+//   try {
+//     const { busNumber, source, destination, city, departureTime, arrivalTime } =
+//       req.body;
+
+//     // Validate required fields
+//     if (
+//       !busNumber ||
+//       !source ||
+//       !destination ||
+//       !city ||
+//       !departureTime ||
+//       !arrivalTime
+//     ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     const newBus = new Bus({
+//       busNumber,
+//       source,
+//       destination,
+//       city,
+//       departureTime,
+//       arrivalTime,
+//     });
+
+//     await newBus.save();
+//     res.status(201).send("your bus saved sucessfully!");
+//   } catch (error) {
+//     console.error("Error creating new bus entry:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+
+
+//Get All Buses
+
+
+
+adminRouter.get("/admin/getallbuses", async (req, res) => {
+  try {
+    const buses = await Bus.find(); // Fetch all buses from the buses collection
+    res.json(buses);
+  } catch (error) {
+    console.error("Error fetching all buses:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+adminRouter.put("/admin/updatebus/:id", async (req, res) => {
+  try {
+    const { busNumber, source, destination, city, departureTime, arrivalTime } = req.body;
+
+    // Validate required fields
+    if (!busNumber || !source || !destination || !city || !departureTime || !arrivalTime) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Validate time format (HH:mm)
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!timeRegex.test(departureTime) || !timeRegex.test(arrivalTime)) {
+      return res.status(400).json({ message: "Invalid time format. Use HH:mm (e.g., 08:30)" });
+    }
+
+    const updatedBus = await Bus.findByIdAndUpdate(
+      req.params.id,
+      { busNumber, source, destination, city, departureTime, arrivalTime },
+      { new: true }
+    );
+
+    if (!updatedBus) {
+      return res.status(404).json({ message: "Bus not found" });
+    }
+
+    res.json({ message: "Bus updated successfully", updatedBus });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating bus: " + error.message });
+  }
+});
+
+
+
+// Update a bus
+// adminRouter.put("/admin/updatebus/:id", async (req, res) => {
+//   try {
+//     const updatedBus = await Bus.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//     if (!updatedBus) {
+//       return res.status(404).json({ message: "Bus not found" });
+//     }
+//     res.json({ message: "Bus updated successfully", updatedBus });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error updating bus: " + error.message });
+//   }
+// });
+
+// Delete a bus
+adminRouter.delete("/admin/deletebus/:id", async (req, res) => {
+  try {
+    const deletedBus = await Bus.findByIdAndDelete(req.params.id);
+    if (!deletedBus) {
+      return res.status(404).json({ message: "Bus not found" });
+    }
+    res.json({ message: "Bus deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting bus: " + error.message });
+  }
+});
+
+
+
+
+
+// Route to fetch student data
+adminRouter.get("/admin/getstudents", async (req, res) => {
+  try {
+    const students = await BusPass.find();
+    res.json(students);
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
 
 module.exports = adminRouter;

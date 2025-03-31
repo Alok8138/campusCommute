@@ -56,7 +56,7 @@ const Login = () => {
         <div className="w-1/2 flex flex-col justify-center">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800">
-              {isLoginForm ? "Login" : "Sign Up"}
+              {isLoginForm ? "Log In" : "Sign Up"}
             </h2>
           </div>
 
