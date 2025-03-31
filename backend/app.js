@@ -10,10 +10,40 @@ const authRouter = require("./src/routes/auth")
 const profileRouter = require("./src/routes/profile")
 const adminRoutes = require("./src/routes/admin");
 const app = express();
-const cors = require("cors")
+const cors = require("cors");
+const busPassRouter = require("./src/routes/busPass");
+const paymentRouter = require("./src/routes/payment");
+const razorpay = require("razorpay");
 
 
 require("dotenv").config();
+
+
+
+
+
+
+// const allowedOrigins = [
+//   "http://localhost:5173", // ✅ Allow local frontend
+//   "https://2a6c-2402-8100-298a-e21e-ad04-c963-ac6e-9b54.ngrok-free.app", // ✅ Allow ngrok frontend
+// ];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("CORS not allowed"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
+
+
+
+
 
 
 app.use(
@@ -33,9 +63,9 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", adminRoutes);
-// app.use("/", requestRouter);
+app.use("/", busPassRouter);
 // app.use("/", userRouter);
-// app.use("/", paymentRouter);
+app.use("/", paymentRouter);
 // app.use("/", chatRouter);
 
 

@@ -8,6 +8,7 @@ const busSchema = new mongoose.Schema({
   city: String,
   departureTime: String,
   arrivalTime: String,
+  fees: Number,
 });
 
 module.exports = mongoose.model("Bus", busSchema);

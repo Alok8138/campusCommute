@@ -239,9 +239,9 @@ function Navbar() {
                 </button>
                 <h2 className="text-2xl font-bold mb-6">Services</h2>
                 <ul className="space-y-3">
-                  <li><Link to="/apply-pass" className="block p-2 hover:bg-gray-700">Apply for Pass</Link></li>
+                  <li><Link to="/applypass" className="block p-2 hover:bg-gray-700">Apply for Pass</Link></li>
                   <li><Link to="/extend-pass" className="block p-2 hover:bg-gray-700">Extend Pass</Link></li>
-                  <li><Link to="/view-status" className="block p-2 hover:bg-gray-700">View Pass Status</Link></li>
+                  <li><Link to="/viewpass" className="block p-2 hover:bg-gray-700">View Pass Status</Link></li>
                   <li><Link to="/help" className="block p-2 hover:bg-gray-700">Help</Link></li>
                   <li><Link to="/about" className="block p-2 hover:bg-gray-700">About Us</Link></li>
                 </ul>

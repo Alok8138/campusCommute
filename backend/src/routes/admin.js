@@ -11,7 +11,7 @@ const Bus = require("../model/BusSchedule");
 
 
 
-
+//read
 adminRouter.get("/admin/getbuses", async (req, res) => {
   try {
     const city = req.query.city;
@@ -41,10 +41,10 @@ adminRouter.get("/admin/getbuses", async (req, res) => {
 
 
 
-
+//create
 adminRouter.post("/admin/addbuses", async (req, res) => {
   try {
-    const { busNumber, source, destination, city, departureTime, arrivalTime } =
+    const { busNumber, source, destination, city, departureTime, arrivalTime ,fees} =
       req.body;
 
     // Validate required fields
@@ -54,7 +54,8 @@ adminRouter.post("/admin/addbuses", async (req, res) => {
       !destination ||
       !city ||
       !departureTime ||
-      !arrivalTime
+      !arrivalTime ||
+      !fees
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -66,6 +67,7 @@ adminRouter.post("/admin/addbuses", async (req, res) => {
       city,
       departureTime,
       arrivalTime,
+      fees,
     });
 
     await newBus.save();
@@ -76,4 +78,13 @@ adminRouter.post("/admin/addbuses", async (req, res) => {
   }
 });
 
+// adminRouter.post('/admin/price')
+// [{"city":{
+// "a":20000,
+// "b":30000
+// }}]
+
+//updata
+
+// delete
 module.exports = adminRouter;

@@ -1,54 +1,123 @@
+// const express = require("express");
+// const multer = require("multer");
+// const profileRouter = express.Router();
+// const { userAuth } = require("../middleware/auth");
+// const { validateEditProfileData } = require('../util/signup.user.validation');
+
+// // Configure Multer for in-memory storage
+// const storage = multer.memoryStorage();
+// const upload = multer({
+//   storage: storage,
+//   fileFilter: (req, file, cb) => {
+//     if (file.mimetype.startsWith("image/")) {
+//       cb(null, true);
+//     } else {
+//       cb(new Error("Only image files are allowed!"), false);
+//     }
+//   },
+//   limits: { fileSize: 1024 * 1024 * 5 }, // 5MB limit
+// });
+
+// profileRouter.get("/profile/view", userAuth, async (req, res) => {
+//   try {
+//     const user = req.user;
+//     res.send(user);
+//   } catch (err) {
+//     res.status(400).send("ERROR : " + err.message);
+//   }
+// });
+
+// profileRouter.patch("/profile/edit", userAuth, upload.single("image"), async (req, res) => {
+//   try {
+//     if (!validateEditProfileData(req)) {
+//       throw new Error("Invalid ")
+//     }
+//     const loggedInUser = req.user;
+//     if (req.body.name) {
+//       loggedInUser.name = req.body.name;
+//     }
+
+//     if (req.body.enrollment) {
+//       loggedInUser.enrollment = req.body.enrollment;
+//     }
+//     if (req.file) {
+//       loggedInUser.profileUrl = req.file.buffer; // Store as binary Buffer in MongoDB
+//     }
+    
+//     await loggedInUser.save();
+//     res.json({ message: "Profile updated!", data: loggedInUser });
+//   } catch (err) {
+//     res.status(500).json({ message: "Internal Server Error", error: err.message });
+//   }
+// });
+
+// module.exports = profileRouter;
+
+
+
+
+
+
+
+
+
+
+
+
 const express = require("express");
 const multer = require("multer");
 const profileRouter = express.Router();
-const { userAuth } = require("../middleware/auth");
-const { validateEditProfileData } = require('../util/signup.user.validation');
+const { userAuth } = require("../middleware/auth"); // Ensure this middleware verifies JWT correctly.
+const { validateEditProfileData } = require("../util/signup.user.validation");
 
 // Configure Multer for in-memory storage
 const storage = multer.memoryStorage();
 const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
+  storage,
+  fileFilter(req, file, cb) {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
       cb(new Error("Only image files are allowed!"), false);
     }
   },
-  limits: { fileSize: 1024 * 1024 * 5 }, // 5MB limit
+  limits: { fileSize: 1024 * 1024 * 5 }, // Limit to 5MB
 });
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
-    const user = req.user;
-    res.send(user);
+    const user = req.user; // Assuming req.user is set by your auth middleware
+    res.json(user);
   } catch (err) {
+    console.error(err);
     res.status(400).send("ERROR : " + err.message);
   }
 });
 
-profileRouter.patch("/profile/edit", userAuth, upload.single("image"), async (req, res) => {
-  try {
-    if (!validateEditProfileData(req)) {
-      throw new Error("Invalid ")
-    }   
-    const loggedInUser = req.user;
-    if (req.body.name) {
-      loggedInUser.name = req.body.name;
-    }
+profileRouter.patch(
+  "/profile/edit",
+  userAuth,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!validateEditProfileData(req))
+        throw new Error("Invalid profile data");
 
-    if (req.body.enrollment) {
-      loggedInUser.enrollment = req.body.enrollment;
+      const loggedInUser = req.user;
+
+      if (req.body.name) loggedInUser.name = req.body.name;
+      if (req.body.enrollment) loggedInUser.enrollment = req.body.enrollment;
+      if (req.file) loggedInUser.profileUrl = req.file.buffer;
+
+      await loggedInUser.save();
+      res.json({ message: "Profile updated!", data: loggedInUser });
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .json({ message: "Internal Server Error", error: err.message });
     }
-    if (req.file) {
-      loggedInUser.profileUrl = req.file.buffer; // Store as binary Buffer in MongoDB
-    }
-    
-    await loggedInUser.save();
-    res.json({ message: "Profile updated!", data: loggedInUser });
-  } catch (err) {
-    res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
-});
+);
 
 module.exports = profileRouter;
