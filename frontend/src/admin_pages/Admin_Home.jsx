@@ -13,6 +13,9 @@ const Admin_Home = () => {
           <Link to="/admin/student-details" className="p-4 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 text-center">
             View Student Details
           </Link>
+          <Link to="/admin/college-details" className="p-4 bg-sky-500 text-white rounded-lg shadow hover:bg-blue-600 text-center">
+            Add College Details
+          </Link>
         </div>
       </div>
     </div>

@@ -4,13 +4,14 @@ const Bus = require("../model/BusSchedule");
 const Admin = require("../model/adminsignup");
 const bcrypt = require('bcrypt');
 const BusPass = require("../model/BusPass")
+const CollegeDetails = require("../model/CollegeDetails");
 
 
-const SECRET_KEY = "Gojo";
+const SECRET_KEY='Gojo';
 
 adminRouter.post("/admin/signup", async (req, res) => {
   try {
-    const { secretkey, id, password, name } = req.body; // Add 'name'
+    const { secretkey, id, password, name } = req.body;
 
     // Check if the secret key matches
     if (secretkey !== SECRET_KEY) {
@@ -31,10 +32,6 @@ adminRouter.post("/admin/signup", async (req, res) => {
       password: passwordHash,
       name,      // Include name from request
     });
-    // const newAdmin = new Admin({
-    //   id,
-    //   password: passwordHash,
-    // });
 
     await newAdmin.save();
     res.status(201).json({ message: "Admin registered successfully!" });
@@ -135,43 +132,6 @@ adminRouter.post("/admin/addbuses", async (req, res) => {
 
 
 
-// adminRouter.post("/admin/addbuses", async (req, res) => {
-//   try {
-//     const { busNumber, source, destination, city, departureTime, arrivalTime } =
-//       req.body;
-
-//     // Validate required fields
-//     if (
-//       !busNumber ||
-//       !source ||
-//       !destination ||
-//       !city ||
-//       !departureTime ||
-//       !arrivalTime
-//     ) {
-//       return res.status(400).json({ message: "All fields are required" });
-//     }
-
-//     const newBus = new Bus({
-//       busNumber,
-//       source,
-//       destination,
-//       city,
-//       departureTime,
-//       arrivalTime,
-//     });
-
-//     await newBus.save();
-//     res.status(201).send("your bus saved sucessfully!");
-//   } catch (error) {
-//     console.error("Error creating new bus entry:", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
-
-
-//Get All Buses
-
 
 
 adminRouter.get("/admin/getallbuses", async (req, res) => {
@@ -219,18 +179,6 @@ adminRouter.put("/admin/updatebus/:id", async (req, res) => {
 
 
 
-// Update a bus
-// adminRouter.put("/admin/updatebus/:id", async (req, res) => {
-//   try {
-//     const updatedBus = await Bus.findByIdAndUpdate(req.params.id, req.body, { new: true });
-//     if (!updatedBus) {
-//       return res.status(404).json({ message: "Bus not found" });
-//     }
-//     res.json({ message: "Bus updated successfully", updatedBus });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error updating bus: " + error.message });
-//   }
-// });
 
 // Delete a bus
 adminRouter.delete("/admin/deletebus/:id", async (req, res) => {
@@ -257,6 +205,33 @@ adminRouter.get("/admin/getstudents", async (req, res) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+adminRouter.post("/admin/addCollege", async (req, res) => {
+  try {
+    const { college, branch, semester, start_date, end_date } = req.body;
+
+    if (!college || !branch || !semester || !start_date || !end_date) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newCollege = new CollegeDetails({ college, branch, semester, start_date, end_date });
+
+    await newCollege.save();
+    res.status(201).json({ message: "College details added successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding college details: " + error.message });
+  }
+});
+
+adminRouter.get("/admin/addCollege", async (req, res) => {
+  try {
+    const colleges = await CollegeDetails.find();
+    res.json(colleges);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching colleges: " + error.message });
   }
 });
 
