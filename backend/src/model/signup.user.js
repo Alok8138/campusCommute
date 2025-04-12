@@ -2,6 +2,12 @@ const mongoose = require("mongoose")
 const validator = require("validator")
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt')
+const fs = require("fs");
+const path = require("path");
+
+const defaultImagePath = path.join(__dirname, "../image/DefaultProfileImage.png");
+const defaultImageBuffer = fs.readFileSync(defaultImagePath); // Read default image
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -48,18 +54,13 @@ const userSchema = new mongoose.Schema(
       },
     },
     profileUrl: {
-      type: String,
-      trim: true,
-      default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      validate(value) {
-        if (!validator.isURL(value)) {
-          throw new Error("invalid Photo URL");
-        }
-      },
+      type: Buffer, // Store image as Buffer
+      default: defaultImageBuffer, // Set default image as Buffer
     },
   },
   { timestamps: true }
 );
+
 userSchema.methods.getJWT = async function () {
   const user = this;
 
@@ -84,9 +85,3 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
 
 
 module.exports = mongoose.model("User", userSchema);
-
-
-// const User = mongoose.model("User", userSchema);
-
-// // Export both models
-// module.exports = User;

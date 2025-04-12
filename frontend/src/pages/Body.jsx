@@ -12,20 +12,35 @@ const Body = () => {
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
 
+
   const fetchUser = async () => {
-    if (userData) return;
     try {
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
       dispatch(addUser(res.data));
     } catch (err) {
-      if (err.status === 401) {
+      if (err.response && err.response.status === 401) {
         navigate("/login");
+      } else {
+        console.error("Failed to fetch user:", err);
       }
-      console.error(err);
     }
   };
+  // const fetchUser = async () => {
+  //   if (userData) return;
+  //   try {
+  //     const res = await axios.get(BASE_URL + "/profile/view", {
+  //       withCredentials: true,
+  //     });
+  //     dispatch(addUser(res.data));
+  //   } catch (err) {
+  //     if (err.status === 401) {
+  //       navigate("/login");
+  //     }
+  //     console.error(err);
+  //   }
+  // };
 
   useEffect(() => {
     fetchUser();
