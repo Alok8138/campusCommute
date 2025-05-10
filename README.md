@@ -26,7 +26,7 @@
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/campuscommute.git
+    git clone https://github.com/Alok8138/campusCommute.git
     ```
 2. Navigate to the project directory:
     ```bash
