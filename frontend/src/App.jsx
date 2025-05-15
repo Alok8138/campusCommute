@@ -17,6 +17,7 @@ import Admin_Home from './admin_pages/Admin_Home';
 import Admin_Login from './admin_pages/Admin_Login';
 import Manage_Bus from './admin_pages/Manage_Bus';
 import Manage_Students from './admin_pages/Manage_Students';
+import Manage_College from './admin_pages/Manage_College';
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
           <Route path="/admin/home" element={<Admin_Home />} />
           <Route path="/admin/bus-management" element={<Manage_Bus />} />
           <Route path="/admin/student-details" element={<Manage_Students />} />
+          <Route path="/admin/college-details" element={<Manage_College />} />
         </Routes>
       </BrowserRouter>
     </Provider>

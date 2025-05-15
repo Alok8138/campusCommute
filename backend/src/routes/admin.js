@@ -4,7 +4,7 @@ const Bus = require("../model/BusSchedule");
 const Admin = require("../model/adminsignup");
 const bcrypt = require('bcrypt');
 const BusPass = require("../model/busPass")
-
+const CollegeDetails = require("../model/CollegeDetails");
 
 const SECRET_KEY = "Gojo";
 
@@ -208,6 +208,86 @@ adminRouter.get("/admin/getstudents", async (req, res) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+
+
+
+
+adminRouter.post("/admin/addCollege", async (req, res) => {
+  try {
+    const { college, branch, semester, start_date, end_date } = req.body;
+
+    if (!college || !branch || !semester || !start_date || !end_date) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newCollege = new CollegeDetails({
+      college,
+      branch,
+      semester,
+      start_date,
+      end_date,
+    });
+
+    await newCollege.save();
+    res.status(201).json({ message: "College details added successfully!" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error adding college details: " + error.message });
+  }
+});
+
+// Delete a bus
+adminRouter.delete("/admin/deleteCollege/:id", async (req, res) => {
+  try {
+    const deletedCollege = await CollegeDetails.findByIdAndDelete(
+      req.params.id
+    );
+    if (!deletedCollege) {
+      return res.status(404).json({ message: "College not found" });
+    }
+    res.json({ message: "College deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting bus: " + error.message });
+  }
+});
+
+adminRouter.put("/admin/updateCollege/:id", async (req, res) => {
+  try {
+    const { college, branch, semester, start_date, end_date } = req.body;
+
+    const updatedCollege = await CollegeDetails.findByIdAndUpdate(
+      req.params.id,
+      { college, branch, semester, start_date, end_date },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCollege) {
+      return res.status(404).json({ message: "College not found" });
+    }
+
+    res.json({ message: "College updated successfully", updatedCollege });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating college: " + error.message });
+  }
+});
+
+adminRouter.get("/admin/addCollege", async (req, res) => {
+  try {
+    const colleges = await CollegeDetails.find();
+    res.json(colleges);
+  } catch (error) {
+    console.error("Error fetching colleges:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching colleges: " + error.message });
   }
 });
 
