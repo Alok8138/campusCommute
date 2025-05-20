@@ -7,9 +7,6 @@ const User = require("../model/signup.user");
 const BusPass = require("../model/busPass");
 
 
-
-
-
 // 1. Create Order
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   const { amount, currency = "INR", receipt, stand, city } = req.body;

@@ -5,10 +5,7 @@ const bcrypt = require("bcrypt");
 const fs = require("fs");
 const path = require("path");
 
-const defaultImagePath = path.join(
-  __dirname,
-  "../image/DefaultProfileImage.png"
-);
+const defaultImagePath = path.join(__dirname, "../image/DefaultProfileImage.png");
 const defaultImageBuffer = fs.readFileSync(defaultImagePath); // Read default image
 
 const userSchema = new mongoose.Schema(
@@ -79,13 +76,10 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-
-
 // Virtual for OTP validity check
 userSchema.virtual("isOTPValid").get(function () {
   return this.otpExpiry && this.otpExpiry > Date.now();
 });
-
 
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(

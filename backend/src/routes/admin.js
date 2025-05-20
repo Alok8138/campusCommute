@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const BusPass = require("../model/busPass")
 const CollegeDetails = require("../model/CollegeDetails");
 
-const SECRET_KEY = "Gojo";
+const SECRET_KEY = "Admin@5657";
 
 adminRouter.post("/admin/signup", async (req, res) => {
   try {
@@ -103,7 +103,7 @@ adminRouter.get("/admin/getbuses", async (req, res) => {
 adminRouter.post("/admin/addbuses", async (req, res) => {
   try {
     const { busNumber, source, destination, city, departureTime, arrivalTime } = req.body;
-
+    console.log(req.body);
     // Validate required fields
     if (!busNumber || !source || !destination || !city || !departureTime || !arrivalTime) {
       return res.status(400).json({ message: "All fields are required" });
@@ -210,11 +210,6 @@ adminRouter.get("/admin/getstudents", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
-
-
-
 
 
 adminRouter.post("/admin/addCollege", async (req, res) => {

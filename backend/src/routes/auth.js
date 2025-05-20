@@ -1,92 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//dummy
-
-
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/signup.user");
-const sendVerificationEmail = require("../util/emailService");
-
+const {sendVerificationEmail} = require("../util/emailService");
 const authRouter = express.Router();
+
 
 // ============== Signup Route ============== //
 authRouter.post("/signup", async (req, res) => {
@@ -101,7 +20,7 @@ authRouter.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Generate OTP and hash password
+    //  OTP and hash password
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = Date.now() + 14 * 60 * 1000; // 14 minutes
     const passwordHash = await bcrypt.hash(password, 10);
@@ -119,7 +38,7 @@ authRouter.post("/signup", async (req, res) => {
 
     await newUser.save();
 
-    // Generate JWT token with user data
+    //  JWT token with user data
     const token = jwt.sign({ enrollment, email }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
@@ -162,7 +81,7 @@ authRouter.post("/login", async (req, res) => {
       });
     }
 
-    // Generate JWT token
+    //  JWT token
     const token = jwt.sign(
       { userId: user._id, enrollment: user.enrollment },
       process.env.JWT_SECRET,

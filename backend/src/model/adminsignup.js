@@ -26,6 +26,7 @@ const adminSchema = new mongoose.Schema(
     // secretkey: {
     //   type: String,
     //   required: true,
+    //   default: "Admin@5657",
     // },
     name: {
       type: String,

@@ -15,20 +15,6 @@ const fs = require("fs");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 busPassRouter.post('/submit-form', async (req, res) => {
   try {
       console.log(req.body);

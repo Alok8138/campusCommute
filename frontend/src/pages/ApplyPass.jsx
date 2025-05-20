@@ -113,9 +113,9 @@ const ApplyPass = () => {
           </div>
 
           {/* Form Content */}
-          {1 && (
+          {showApply && (
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
-              {/* Basic Details Section */}
+
               <div className="grid md:grid-cols-3 gap-6">
                 {[
                   { name: "srNo", label: "Sr. No", type: "text" },

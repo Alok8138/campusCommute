@@ -10,9 +10,10 @@ import Homepage from "./pages/Homepage";
 import Body from "./pages/Body";
 import About from "./pages/About";
 import ApplyPass from "./pages/ApplyPass";
+import Help from "./pages/Help";
 // import Admin from "./pages/Admin";
 import ViewPass from "./pages/ViewPass";
-import BusPassDownload from "./pages/ViewPass";
+import BusPassDownload from "./pages/ViewPass"; 
 import Admin_Home from './admin_pages/Admin_Home';
 import Admin_Login from './admin_pages/Admin_Login';
 import Manage_Bus from './admin_pages/Manage_Bus';
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
             <Route path="/applypass" element={<ApplyPass />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/viewpass" element={<BusPassDownload />} />
           </Route>
           <Route path="/admin/login" element={<Admin_Login />} />
