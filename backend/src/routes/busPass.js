@@ -9,12 +9,6 @@ const fs = require("fs");
 
 
 
-
-
-
-
-
-
 busPassRouter.post('/submit-form', async (req, res) => {
   try {
       console.log(req.body);
@@ -441,92 +435,3 @@ busPassRouter.get("/download-bus-pass", userAuth, async (req, res) => {
 module.exports = busPassRouter;
 
 
-
-// backend/routes/busPassRouter.js
-
-
-// // Ensure temp PDF folder exists
-// const pdfFolderPath = path.join(__dirname, "../../pdf");
-// if (!fs.existsSync(pdfFolderPath)) fs.mkdirSync(pdfFolderPath, { recursive: true });
-
-// busPassRouter.get("/download-bus-pass", userAuth, async (req, res) => {
-//   try {
-//     const enrollment = req.user.enrollment;
-//     const busPassData = await BusPass.findOne({ enrollmentNo: enrollment });
-//     if (!busPassData) return res.status(404).json({ error: "Bus pass not found." });
-
-//     // Profile photo: Prefer busPassData.profilePhotoUrl, fallback to req.user.profilePhotoUrl
-//     const profilePhotoUrl = user.profilePhotoUrl || req.user.profilePhotoUrl;
-
-//     // PDF setup
-//     const doc = new PDFDocument({ size: "A4", margin: 50 });
-//     const filePath = path.join(pdfFolderPath, `bus-pass-${enrollment}.pdf`);
-//     const writeStream = fs.createWriteStream(filePath);
-//     doc.pipe(writeStream);
-
-//     // --- PDF LAYOUT (simplified for clarity) ---
-//     doc.fontSize(26).text("CampusCommute Bus Pass", { align: "center" });
-//     doc.moveDown();
-//     // profilePhotoUrl = profileUrl;
-
-//     // --- Profile Photo ---
-//     if (profilePhotoUrl) {
-//       try {
-//         let imgBuffer;
-//         if (profilePhotoUrl.startsWith("http")) {
-//           // Download from URL
-//           const imgResp = await axios.get(profilePhotoUrl, { responseType: "arraybuffer" });
-//           imgBuffer = Buffer.from(imgResp.data, "binary");
-//         } else {
-//           // Local file path
-//           imgBuffer = fs.readFileSync(profilePhotoUrl);
-//         }
-//         doc.image(imgBuffer, 50, 100, { width: 100, height: 120, fit: [100, 120] });
-//       } catch (err) {
-//         doc.rect(50, 100, 100, 120).stroke().fontSize(10).text("Photo Not Found", 50, 160, { width: 100, align: "center" });
-//       }
-//     } else {
-//       doc.rect(50, 100, 100, 120).stroke().fontSize(10).text("No Photo", 50, 160, { width: 100, align: "center" });
-//     }
-
-//     // --- Student Details ---
-//     doc.fontSize(14)
-//       .text(`Name: ${busPassData.name}`, 180, 100)
-//       .text(`Enrollment No: ${busPassData.enrollmentNo}`, 180, 120)
-//       .text(`College: ${busPassData.college}`, 180, 140)
-//       .text(`Branch: ${busPassData.branch}`, 180, 160)
-//       .text(`Semester: ${busPassData.semester}`, 180, 180)
-//       .text(`Stand: ${busPassData.stand}`, 180, 200);
-
-//     // --- Validity ---
-//     const issueDate = busPassData.createdAt || new Date();
-//     const expiryDate = new Date(issueDate);
-//     expiryDate.setDate(expiryDate.getDate() + 150);
-//     doc.moveDown().fontSize(12)
-//       .text(`Issue Date: ${issueDate.toLocaleDateString()}`)
-//       .text(`Expiry Date: ${expiryDate.toLocaleDateString()}`);
-
-//     // --- Footer ---
-//     doc.moveDown().fontSize(10).text("www.campuscommute.com", { align: "center" });
-
-//     doc.end();
-
-//     writeStream.on("finish", () => {
-//       res.setHeader("Content-Type", "application/pdf");
-//       res.setHeader("Content-Disposition", `attachment; filename="bus-pass-${enrollment}.pdf"`);
-//       res.download(filePath, (err) => {
-//         if (err) console.error("Download error:", err);
-//         fs.unlinkSync(filePath); // Clean up
-//       });
-//     });
-//     writeStream.on("error", (err) => {
-//       console.error(err);
-//       res.status(500).send("Error generating PDF");
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
-// module.exports = busPassRouter;

@@ -22,7 +22,7 @@ const Help = () => {
     {
       id: "general",
       title: "General Information",
-      icon: <HelpCircle className="w-6 h-6 bg-gray-50" />,
+      icon: <HelpCircle className="w-6 h-6 text-indigo-500" />, // Adjusted icon color
       faqs: [
         {
           question: "What is the College Bus Pass System?",
@@ -44,7 +44,7 @@ const Help = () => {
     {
       id: "passes",
       title: "Bus Passes",
-      icon: <Download className="w-6 h-6 text-green-500" />,
+      icon: <Download className="w-6 h-6 text-teal-500" />, // Adjusted icon color
       faqs: [
         {
           question: "How do I download my bus pass?",
@@ -76,7 +76,7 @@ const Help = () => {
         {
           question: "Are there any discounts available?",
           answer:
-            'Yes, discounts may be available for semester-long passes, annual passes, or for students with financial aid. Check the "Discounts" tab in the payment section to see if you qualify.',
+          'Yes, discounts may be available for semester-long passes, annual passes, or for students with financial aid. Check the "Discounts" tab in the payment section to see if you qualify.',
         },
         {
           question: "How do I view my payment history?",
@@ -110,7 +110,7 @@ const Help = () => {
     {
       id: "schedules",
       title: "Bus Schedules",
-      icon: <Calendar className="w-6 h-6 text-red-500" />,
+      icon: <Calendar className="w-6 h-6 text-rose-500" />, // Adjusted icon color
       faqs: [
         {
           question: "How do I check bus schedules?",
@@ -184,12 +184,12 @@ const Help = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white"> {/* Changed background to white for body */}
       {/* Header */}
-      <header className="bg-blue-600 text-white py-6">
+      <header className="bg-gray-900 text-white py-6"> {/* Changed header to black/dark gray */}
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-center">Help Center</h1>
-          <p className="text-center mt-2">
+          <p className="text-center mt-2 text-gray-300"> {/* Adjusted text color for header subtitle */}
             Find answers to all your questions about the College Bus Pass System
           </p>
 
@@ -198,9 +198,9 @@ const Help = () => {
             <input
               type="text"
               placeholder="Search for help topics..."
-              className="w-full px-4 py-3 rounded-lg pl-12 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg pl-12 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" // Adjusted search bar colors
             />
-            <Search className="absolute left-4 top-3.5 text-gray-500" />
+            <Search className="absolute left-4 top-3.5 text-gray-400" /> {/* Adjusted search icon color */}
           </div>
         </div>
       </header>
@@ -210,7 +210,7 @@ const Help = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Left Column - FAQ Categories */}
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800"> {/* Adjusted heading color */}
               Frequently Asked Questions
             </h2>
 
@@ -218,22 +218,22 @@ const Help = () => {
               {faqSections.map((section) => (
                 <div
                   key={section.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200" // Added subtle border
                 >
                   <button
-                    className="w-full px-6 py-4 flex items-center justify-between focus:outline-none"
+                    className="w-full px-6 py-4 flex items-center justify-between focus:outline-none hover:bg-gray-50 transition-colors" // Added hover effect
                     onClick={() => toggleSection(section.id)}
                   >
                     <div className="flex items-center">
                       {section.icon}
-                      <span className="font-medium ml-3 text-lg">
+                      <span className="font-medium ml-3 text-lg text-gray-800"> {/* Adjusted text color */}
                         {section.title}
                       </span>
                     </div>
                     {openSection === section.id ? (
-                      <ChevronUp className="w-5 h-5 text-gray-500" />
+                      <ChevronUp className="w-5 h-5 text-gray-600" /> 
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                      <ChevronDown className="w-5 h-5 text-gray-600" /> 
                     )}
                   </button>
 
@@ -245,7 +245,7 @@ const Help = () => {
                             key={index}
                             className="border-b border-gray-100 pb-4 last:border-0 last:pb-0"
                           >
-                            <h4 className="font-medium bg-gray-50 mb-2">
+                            <h4 className="font-medium text-gray-700 mb-2"> {/* Adjusted text color */}
                               {faq.question}
                             </h4>
                             <p className="text-gray-600">{faq.answer}</p>
@@ -259,17 +259,17 @@ const Help = () => {
             </div>
 
             {/* Contact Support */}
-            <div className="mt-10 bg-blue-50 rounded-lg p-6 border border-blue-100">
-              <h3 className="text-xl font-semibold mb-3">Still need help?</h3>
+            <div className="mt-10 bg-gray-50 rounded-lg p-6 border border-gray-200"> {/* Adjusted background and border */}
+              <h3 className="text-xl font-semibold mb-3 text-gray-800">Still need help?</h3>
               <p className="text-gray-700 mb-4">
                 If you couldn't find what you're looking for, our support team
                 is here to help.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                <button className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"> {/* Adjusted button color */}
                   Contact Support
                 </button>
-                <button className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded-md hover:bg-blue-50 transition-colors">
+                <button className="bg-white text-indigo-600 border border-indigo-600 px-6 py-2 rounded-md hover:bg-indigo-50 transition-colors"> {/* Adjusted button color */}
                   Submit a Ticket
                 </button>
               </div>
@@ -278,12 +278,12 @@ const Help = () => {
 
           {/* Right Column - Video Tutorials and Quick Links */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">Video Tutorials</h2>
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">Video Tutorials</h2>
             <div className="space-y-4">
               {videoTutorials.map((video) => (
                 <div
                   key={video.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
                 >
                   <img
                     src={video.thumbnail}
@@ -291,12 +291,12 @@ const Help = () => {
                     className="w-full h-40 object-cover"
                   />
                   <div className="p-4">
-                    <h4 className="font-medium text-lg mb-1">{video.title}</h4>
+                    <h4 className="font-medium text-lg mb-1 text-gray-800">{video.title}</h4>
                     <p className="text-gray-500 text-sm mb-2">
                       {video.duration}
                     </p>
                     <p className="text-gray-600 text-sm">{video.description}</p>
-                    <button className="mt-3 text-blue-600 font-medium text-sm flex items-center">
+                    <button className="mt-3 text-indigo-600 font-medium text-sm flex items-center"> {/* Adjusted button color */}
                       Watch Now
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -320,13 +320,13 @@ const Help = () => {
 
             {/* Quick Links */}
             <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-4">Quick Links</h2>
-              <div className="bg-white rounded-lg shadow-md p-4">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Quick Links</h2>
+              <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
                 <ul className="space-y-2">
                   <li>
                     <a
                       href="#"
-                      className="text-blue-600 hover:underline flex items-center"
+                      className="text-indigo-600 hover:underline flex items-center" // Adjusted link color
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download Bus Pass Guide
@@ -335,7 +335,7 @@ const Help = () => {
                   <li>
                     <a
                       href="#"
-                      className="text-blue-600 hover:underline flex items-center"
+                      className="text-indigo-600 hover:underline flex items-center" // Adjusted link color
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       Payment Methods & Security
@@ -344,7 +344,7 @@ const Help = () => {
                   <li>
                     <a
                       href="#"
-                      className="text-blue-600 hover:underline flex items-center"
+                      className="text-indigo-600 hover:underline flex items-center" // Adjusted link color
                     >
                       <Bus className="w-4 h-4 mr-2" />
                       Route Maps & Information
@@ -353,7 +353,7 @@ const Help = () => {
                   <li>
                     <a
                       href="#"
-                      className="text-blue-600 hover:underline flex items-center"
+                      className="text-indigo-600 hover:underline flex items-center" // Adjusted link color
                     >
                       <HelpCircle className="w-4 h-4 mr-2" />
                       System Requirements
@@ -362,7 +362,7 @@ const Help = () => {
                   <li>
                     <a
                       href="#"
-                      className="text-blue-600 hover:underline flex items-center"
+                      className="text-indigo-600 hover:underline flex items-center" // Adjusted link color
                     >
                       <Bell className="w-4 h-4 mr-2" />
                       Notification Settings Guide
@@ -374,35 +374,6 @@ const Help = () => {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-6 mt-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-xl font-bold">College Bus Pass System</h3>
-              <p className="text-gray-400 mt-1">
-                Making transportation easier for students
-              </p>
-            </div>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                Contact
-              </a>
-            </div>
-          </div>
-          <div className="mt-6 text-center text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} College Bus Pass System. All
-            rights reserved.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
