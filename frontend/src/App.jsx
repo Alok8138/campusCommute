@@ -11,6 +11,7 @@ import Body from "./pages/Body";
 import About from "./pages/About";
 import ApplyPass from "./pages/ApplyPass";
 import Help from "./pages/Help";
+import Chat from "./pages/Chat";
 // import Admin from "./pages/Admin";
 import ViewPass from "./pages/ViewPass";
 import BusPassDownload from "./pages/ViewPass"; 
@@ -33,10 +34,10 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/applypass" element={<ApplyPass />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="/viewpass" element={<BusPassDownload />} />
           </Route>
           <Route path="/admin/login" element={<Admin_Login />} />
-          {/* <Route path="/admin/signup" element={<Admin_Signup />} /> */}
           <Route path="/admin/home" element={<Admin_Home />} />
           <Route path="/admin/bus-management" element={<Manage_Bus />} />
           <Route path="/admin/student-details" element={<Manage_Students />} />
