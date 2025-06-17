@@ -1,23 +1,113 @@
-# CampusCommute
+# 🚍 CampusCommute
 
-**CampusCommute** is a web application built using the MERN stack (MongoDB, Express, React, Node.js) that allows students to manage their college bus passes, pay fees, and download campus-bus-pass.
+**CampusCommute** is a full-stack web application developed using the **MERN stack** (MongoDB, Express.js, React.js with Vite, Node.js). It is a smart and scalable **college bus pass management system** designed to automate and streamline university transportation services for students and staff.
 
-## Features
+---
 
-- **Student Authentication:** Users can authenticate using their email and OTP verification.
-- **Bus Pass Management:** Students can download their bus passes after payment.
-- **Fee Payment:** Students can pay their fees through the platform.
+## 🌟 Features
 
+### 🡩‍🏫 For Students
 
-## Tech Stack
+- Apply for bus passes online (semester-based)
+- Extend bus passes before expiry
+- View and download campus bus pass
+- Real-time bus schedule lookup by entering city or stop
+- Manage user profile (edit name and upload profile picture)
+- Track pass usage and payment history
+- Razorpay integration for secure online payments (UPI, Cards, Net Banking)
+- Downloadable payment receipts and invoices
 
-- **Frontend:** React.js
-- **Backend:** Node.js, Express
-- **Database:** MongoDB
-- **Authentication:** Email OTP verification
+### 🡩‍💼 For Admins
 
+- Admin dashboard for managing bus and student data
+- CRUD operations on bus routes and schedules
+- View pass purchase history and revenue reports
+- Generate downloadable Excel reports
+- Dynamic update of bus schedules and capacities
 
-## Screenshots
+### 🤖 Chatbot Integration
+
+- Custom chatbot named **Pakkun** trained using **prompt engineering**
+- Helps users navigate the platform and provides quick answers about bus timings, registration, and pass status
+- Developed using Google Generative AI and integrated with the React frontend
+
+---
+
+## 🧰 Tech Stack
+
+| Layer           | Technology                    |
+| --------------- | ----------------------------- |
+| Frontend        | React.js + Vite, Tailwind CSS |
+| Backend         | Node.js, Express.js           |
+| Database        | MongoDB                       |
+| Authentication  | JWT-based auth                |
+| Payment         | Razorpay Payment Gateway      |
+| Chatbot         | Google Generative AI          |
+| Version Control | Git & GitHub                  |
+
+---
+
+## 🔧 Installation
+
+### Prerequisites
+
+- Node.js and npm installed
+- MongoDB running locally or on MongoDB Atlas
+- Razorpay account for test/live payment keys
+- Google Generative AI API key (for chatbot)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Alok8138/campusCommute.git
+cd CampusCommute
+```
+
+### Backend Setup
+
+```bash
+cd server
+npm install
+# Add .env file with the following keys:
+# MONGO_URI=
+# JWT_SECRET=
+# RAZORPAY_KEY_ID=
+# RAZORPAY_SECRET_KEY=
+
+npm start
+```
+
+### Frontend Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+---
+
+## 📌 Key Functionalities
+
+- ✅ JWT Authentication (Login/Register)
+- 🚌 Student Bus Pass Management
+- 🕒 Real-Time Bus Schedules
+- 💳 Razorpay Payment Integration
+- 📊 Admin Analytics Dashboard
+- 🗣️ Generative AI Chatbot with Prompt Engineering
+
+---
+
+## 🎓 Use Cases
+
+- University Transportation System
+- College Bus Pass Automation
+- Smart Campus Apps for Students
+- Chatbot-assisted Campus Services
+
+---
+
+## 📷 Screenshots
 
 ### Signup Page
 ![image](https://github.com/user-attachments/assets/2245694b-d8a7-4d5d-bdaa-0e4f35766ab3)
@@ -33,54 +123,15 @@
 
 ### Admin Deskboard
 ![image](https://github.com/user-attachments/assets/0fafe15c-fd66-42e6-a358-9edad7bb9beb)
+---
 
-## Installation
+## 🤝 Contributors
 
-### Prerequisites
-- Node.js and npm installed
-- MongoDB database setup
+- Dharmik Prajapati
+- Alok Patel
 
-### Steps to Run Locally
+---
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/Alok8138/campusCommute.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd campuscommute
-    ```
+## 📃 License
 
-3. Install backend dependencies:
-    ```bash
-    cd backend
-    npm install
-    ```
-
-4. Set up the MongoDB connection by creating a `.env` file in the backend directory and adding your MongoDB connection string:
-    ```
-    MONGO_URI=your_mongodb_connection_string
-    ```
-
-5. Start the backend server:
-    ```bash
-    npm run dev
-    ```
-
-6. Install frontend dependencies:
-    ```bash
-    cd ../frontend
-    npm install
-    ```
-
-7. Start the frontend development server:
-    ```bash
-    npm run dev
-    ```
-
-Your app should now be running on `http://localhost:3000`.
-
-## Contributing
-
-Feel free to fork this repository, submit issues, or make pull requests. Contributions are welcome!
-
+This project is licensed under the MIT License. Feel free to use, modify, and share with attribution.
