@@ -66,7 +66,7 @@ cd CampusCommute
 ### Backend Setup
 
 ```bash
-cd server
+cd backend
 npm install
 # Add .env file with the following keys:
 # MONGO_URI=
@@ -80,7 +80,7 @@ npm start
 ### Frontend Setup
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
