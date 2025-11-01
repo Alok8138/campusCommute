@@ -16,6 +16,7 @@ const paymentRouter = require("./src/routes/payment");
 const razorpay = require("razorpay");
 
 const admintokenRoutes = require('./src/routes/admin_routes');
+// const llmRouter = require("./src/routes/llm");
 
 require("dotenv").config();
 
@@ -41,6 +42,9 @@ app.use("/", busPassRouter);
 app.use("/", paymentRouter);
 
 app.use("/", admintokenRoutes);
+
+// LLM / chatbot route
+// app.use("/", llmRouter);
 
 
 

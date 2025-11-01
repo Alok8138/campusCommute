@@ -31,10 +31,11 @@ const FloatingChatbot = () => {
     setIsTyping(true);
 
     // Always attempt the API; on error we show a friendly message
+    const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
     try {
       const response = await axios({
-        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAyZJeKGZl78XVftSvKV2iu9TFj-QUmHes",
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
         method: "post",
         data: {
           contents: [{ parts: [{ text: userMessage }] }],
