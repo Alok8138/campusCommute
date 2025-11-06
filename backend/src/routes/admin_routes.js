@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { adminAuth } = require('../middleware/admin_auth');
 
+
+FRONTEND_PORT = process.env.FRONTEND_PORT
+
 // Admin logout route
 router.post('/admin/logout', adminAuth, (req, res) => {
   try {
@@ -37,7 +40,7 @@ router.get('/logout', adminAuth, (req, res) => {
       secure: process.env.NODE_ENV === 'production'
     });
 
-    const frontendLogin = process.env.FRONTEND_URL || 'http://localhost:5173/admin/login';
+    const frontendLogin = `http://localhost:${FRONTEND_PORT}/admin/login` || 'http://localhost:5173/admin/login';
     // If client expects HTML, redirect to frontend login page so user sees login UI
     if (req.accepts('html')) {
       return res.redirect(frontendLogin);
@@ -60,7 +63,7 @@ router.get('/admin/logout', (req, res) => {
       secure: process.env.NODE_ENV === 'production'
     });
 
-    const frontendLogin = process.env.FRONTEND_URL || 'http://localhost:5173/admin/login';
+    const frontendLogin = `https://localhost:${FRONTEND_PORT}/admin/login` || 'http://localhost:5173/admin/login';
     return res.redirect(frontendLogin);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Logout failed', error: error.message });

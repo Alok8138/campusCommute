@@ -155,7 +155,7 @@ const AboutUs = () => {
             pass today!
           </p>
           <a
-            href="/#"
+            href="/applypass"
             className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105"
           >
             Get Your Pass Now

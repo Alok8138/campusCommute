@@ -174,7 +174,7 @@ const Footer = () => {
         </p>{" "}
        
         <p className="text-xs text-gray-500 mt-1">
-          Designed with{" "}
+          Designed by Dharmik & Alok with{" "}
           <span role="img" aria-label="heart">
             ❤️
           </span>{" "}

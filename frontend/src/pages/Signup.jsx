@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,6 +11,9 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
+
+// const BASE_URL = BASE_URL || "http://localhost:3000";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +32,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/signup",
+        `${BASE_URL}/api/signup`,
         // "http://localhost:3000/signup",
         formData
       );

@@ -20,12 +20,12 @@ const admintokenRoutes = require('./src/routes/admin_routes');
 
 require("dotenv").config();
 
+FRONTEND_PORT = process.env.FRONTEND_PORT
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: `http://localhost:${FRONTEND_PORT}` || "http://localhost:5173",
     credentials: true,
-    
   })
 );
 app.use(express.json());

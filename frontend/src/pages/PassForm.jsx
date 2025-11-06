@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
-const BASE_URL = "http://localhost:3000";
 
 const PassForm = ({
   feeAmount,
@@ -17,7 +17,7 @@ const PassForm = ({
   const handleBuyClick = async () => {
     try {
       const orderRes = await axios.post(
-        `${BASE_URL}/payment/create`,
+        BASE_URL + "/payment/create",
         {
           amount: parseInt(feeAmount.toString()),
           currency: "INR",

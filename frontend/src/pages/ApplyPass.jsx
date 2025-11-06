@@ -12,6 +12,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import PassForm from "./PassForm";
+import { BASE_URL } from "../utils/constants";
+
+
 
 const ApplyPass = () => {
 
@@ -51,8 +54,7 @@ const ApplyPass = () => {
     setShowPayment(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/submit-form",
+      const response = await axios.post(BASE_URL+ "/submit-form",
         formData
       );
       setServerMessage(response.data.message); // Success message

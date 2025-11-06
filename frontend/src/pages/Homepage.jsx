@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { BASE_URL } from "../utils/constants";
 
 function Homepage() {
   const [city, setCity] = useState('');
@@ -25,8 +26,7 @@ function Homepage() {
     setError(null);
 
     try {
-      const response = await axios.get(
-        `http://localhost:3000/getbuses?city=${formattedCity}`
+      const response = await axios.get(BASE_URL + `/getbuses?city=${formattedCity}`
       );
       setBuses(response.data);
     } catch (error) {
