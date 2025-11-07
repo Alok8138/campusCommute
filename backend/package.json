@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "tunnel": "ngrok http 3000"
+    "tunnel": "ngrok http 3000",
+    "builds": "npm run dev"
   },
   "author": "",
   "license": "ISC",
