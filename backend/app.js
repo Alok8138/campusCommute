@@ -20,7 +20,7 @@ const admintokenRoutes = require('./src/routes/admin_routes');
 
 require("dotenv").config();
 
-FRONTEND_PORT = process.env.FRONTEND_PORT
+const FRONTEND_PORT = process.env.FRONTEND_PORT
 
 app.use(
   cors({
