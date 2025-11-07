@@ -18,6 +18,14 @@ const razorpay = require("razorpay");
 const admintokenRoutes = require('./src/routes/admin_routes');
 // const llmRouter = require("./src/routes/llm");
 
+// CORS Configuration
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://your-frontend-domain.com'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 require("dotenv").config();
 
 const FRONTEND_PORT = process.env.FRONTEND_PORT
