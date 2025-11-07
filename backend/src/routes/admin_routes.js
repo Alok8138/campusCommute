@@ -3,7 +3,7 @@ const router = express.Router();
 const { adminAuth } = require('../middleware/admin_auth');
 
 
-FRONTEND_PORT = process.env.FRONTEND_PORT
+const FRONTEND_PORT = process.env.FRONTEND_PORT
 
 // Admin logout route
 router.post('/admin/logout', adminAuth, (req, res) => {
