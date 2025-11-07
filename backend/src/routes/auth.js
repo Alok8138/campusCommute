@@ -114,6 +114,7 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
+
 // ============== Logout Route ============== //
 authRouter.post("/logout", (req, res) => {
   res.clearCookie("token", {
