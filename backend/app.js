@@ -18,22 +18,19 @@ const razorpay = require("razorpay");
 const admintokenRoutes = require('./src/routes/admin_routes');
 // const llmRouter = require("./src/routes/llm");
 
-// CORS Configuration
-app.use(cors({
-  origin: ['http://localhost:5173', 'https://your-frontend-domain.com'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-
+// Load environment variables
 require("dotenv").config();
 
-const FRONTEND_PORT = process.env.FRONTEND_PORT
-
+// CORS Configuration
+// Ensure we have a sensible default for FRONTEND_PORT so the origin
+// doesn't become "http://localhost:undefined" which breaks credentialed requests.
+const FRONTEND_PORT = process.env.FRONTEND_PORT || 5173;
 app.use(
   cors({
-    origin: `http://localhost:${FRONTEND_PORT}` || "http://localhost:5173",
+    origin: `http://localhost:${FRONTEND_PORT}`,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 app.use(express.json());

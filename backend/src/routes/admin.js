@@ -7,7 +7,7 @@ const BusPass = require("../model/busPass")
 const CollegeDetails = require("../model/CollegeDetails");
 const { adminAuth } = require("../middleware/admin_auth");
 
-const SECRET_KEY = "om";
+const SECRET_KEY = process.env.SECRET_KEY || "GOJO";
 
 adminRouter.post("/admin/signup", async (req, res) => {
   try {

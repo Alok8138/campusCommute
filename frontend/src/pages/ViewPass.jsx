@@ -18,7 +18,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 
 // const BASE_URL = `http://localhost:${process.env.BACKEND_PORT}` || "http://localhost:3000";
-
+  
 
 const BusPassDownloadCard = () => {
   const [loading, setLoading] = useState(false);
@@ -52,7 +52,8 @@ const BusPassDownloadCard = () => {
       window.URL.revokeObjectURL(url);
       setSuccessMsg("🎉 Bus Pass downloaded successfully!");
     } catch (err) {
-      setErrorMsg("❌ " + (err.response?.data?.error || err.message || "Unable to download PDF."));
+      // setErrorMsg("❌ " + (err.response?.data?.error || err.message || "Unable to download PDF."));
+        setErrorMsg("PLEASE APPLY FOR THE BUS PASS FIRST");
     } finally {
       setLoading(false);
     }

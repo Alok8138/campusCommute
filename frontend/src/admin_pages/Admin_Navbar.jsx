@@ -15,27 +15,30 @@ function Admin_Navbar() {
 
 
   const handleLogout = async () => {
-  try {
-    // Call backend logout endpoint with credentials
-      // Clear frontend state first
-      dispatch(removeUser());
-      localStorage.removeItem('token_admin');
-      localStorage.removeItem('user');
+    try {
+      // Call backend logout endpoint with credentials so the server can clear the cookie.
+      await axios.post(`${BASE_URL}/admin/logout`, {}, { withCredentials: true });
 
-  // Perform a top-level navigation to the backend admin logout endpoint so the browser
-  // sends the SameSite=lax cookie on logout. Use the admin-specific path to avoid
-  // colliding with the normal user `/logout` endpoint.
-  window.location.href = `${BASE_URL}/admin/logout`;
-  } catch (err) {
-    console.error("Logout error:", err);
-    
-    // Even if backend logout fails, clear frontend state
-    dispatch(removeUser());
-    // localStorage.removeItem('token_admin');
-    // localStorage.removeItem('user');
-    navigate("/admin/login");
-  }
-};
+      // Clear frontend state and storage
+      dispatch(removeUser());
+      localStorage.removeItem("token_admin");
+      localStorage.removeItem("user");
+
+      // Ensure cookie is removed on client-side as a fallback (best-effort)
+      document.cookie = "token_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+      // Navigate to admin login
+      navigate("/admin/login");
+    } catch (err) {
+      console.error("Logout error:", err);
+      // Even if the backend call fails, clear frontend state and redirect to login
+      dispatch(removeUser());
+      localStorage.removeItem("token_admin");
+      localStorage.removeItem("user");
+      document.cookie = "token_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      navigate("/admin/login");
+    }
+  };
 
   // const handleLogout = async () => {
   //   try {

@@ -63,8 +63,9 @@ router.get('/admin/logout', (req, res) => {
       secure: process.env.NODE_ENV === 'production'
     });
 
-    const frontendLogin = `https://localhost:${FRONTEND_PORT}/admin/login` || 'http://localhost:5173/admin/login';
-    return res.redirect(frontendLogin);
+  // Use http for local development frontend URL to avoid HTTPS/SSL redirects on localhost
+  const frontendLogin = `http://localhost:${FRONTEND_PORT}/admin/login` || 'http://localhost:5173/admin/login';
+  return res.redirect(frontendLogin);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Logout failed', error: error.message });
   }
