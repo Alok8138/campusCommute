@@ -113,7 +113,7 @@ const ManageStudents = () => {
                   "Enrollment No",
                   "College",
                   "Branch",
-                  "Phone",
+                  "City",
                   "Actions",
                 ].map((head) => (
                   <TableCell
@@ -133,7 +133,7 @@ const ManageStudents = () => {
                   <TableCell>{student.enrollmentNo}</TableCell>
                   <TableCell>{student.college}</TableCell>
                   <TableCell>{student.branch}</TableCell>
-                  <TableCell>{student.phone}</TableCell>
+                  <TableCell>{student.city}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"

@@ -126,6 +126,54 @@ function Navbar() {
                 </button>
                 <h2 className="text-2xl font-bold mb-6">Services</h2>
                 <ul className="space-y-3">
+  <li>
+    <Link
+      to="/applypass"
+      className="block p-2 hover:bg-gray-700"
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      Apply for Pass
+    </Link>
+  </li>
+  <li>
+    <Link
+      to="/viewpass"
+      className="block p-2 hover:bg-gray-700"
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      View Pass Status
+    </Link>
+  </li>
+  <li>
+    <Link
+      to="/help"
+      className="block p-2 hover:bg-gray-700"
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      Help
+    </Link>
+  </li>
+  <li>
+    <Link
+      to="/about"
+      className="block p-2 hover:bg-gray-700"
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      About Us
+    </Link>
+  </li>
+  <li>
+    <Link
+      to="/chat"
+      className="block p-2 hover:bg-gray-700"
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      Chat Now
+    </Link>
+  </li>
+</ul>
+
+                {/* <ul className="space-y-3">
                   <li>
                     <Link
                       to="/applypass"
@@ -157,7 +205,7 @@ function Navbar() {
                       Chat Now
                     </Link>
                   </li>
-                </ul>
+                </ul> */}
               </motion.div>
             )}
           </AnimatePresence>

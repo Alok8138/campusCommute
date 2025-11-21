@@ -14,6 +14,16 @@ authRouter.post("/signup", async (req, res) => {
   try {
     const { name, email, enrollment, password } = req.body;
 
+    // Validate name length explicitly
+    if (!name || name.length < 3) {
+      return res.status(400).json({ message: "Name must be at least 3 characters long" });
+    }
+
+    // Validate enrollment length: must be exactly 11 or 5 digits
+    if (!enrollment || !(enrollment.length === 11 || enrollment.length === 5)) {
+      return res.status(400).json({ message: "Enrollment must be exactly 11 or 5 digits long" });
+    }
+
     // Check for existing user
     const existingUser = await User.findOne({
       $or: [{ email }, { enrollment }],
@@ -22,7 +32,7 @@ authRouter.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    //  OTP and hash password
+    // OTP and hash password
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = Date.now() + 14 * 60 * 1000; // 14 minutes
     const passwordHash = await bcrypt.hash(password, 10);
@@ -40,7 +50,7 @@ authRouter.post("/signup", async (req, res) => {
 
     await newUser.save();
 
-    //  JWT token with user data
+    // JWT token with user data
     const token = jwt.sign({ enrollment, email }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
@@ -55,9 +65,63 @@ authRouter.post("/signup", async (req, res) => {
     });
   } catch (error) {
     console.error("Signup error:", error);
+
+    if (error.name === "ValidationError" && error.errors?.name?.kind === "minlength") {
+      return res.status(400).json({ message: "Name must be at least 3 characters long" });
+    }
+
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// authRouter.post("/signup", async (req, res) => {
+//   try {
+//     const { name, email, enrollment, password } = req.body;
+
+//     // Check for existing user
+//     const existingUser = await User.findOne({
+//       $or: [{ email }, { enrollment }],
+//     });
+//     if (existingUser) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     //  OTP and hash password
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//     const otpExpiry = Date.now() + 14 * 60 * 1000; // 14 minutes
+//     const passwordHash = await bcrypt.hash(password, 10);
+
+//     // Create a new unverified user
+//     const newUser = new User({
+//       name,
+//       email,
+//       enrollment,
+//       password: passwordHash,
+//       isVerified: false,
+//       otp,
+//       otpExpiry,
+//     });
+
+//     await newUser.save();
+
+//     //  JWT token with user data
+//     const token = jwt.sign({ enrollment, email }, process.env.JWT_SECRET, {
+//       expiresIn: "24h",
+//     });
+
+//     // Send verification email
+//     await sendVerificationEmail(email, otp);
+
+//     // Return token to client
+//     res.status(201).json({
+//       message: "OTP sent to email",
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Signup error:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 
 
@@ -192,13 +256,10 @@ authRouter.post("/verify-otp", async (req, res) => {
 });
 
 
-
-
-
-
-
-
 module.exports = authRouter;
+
+
+
 
 // const express = require("express");
 

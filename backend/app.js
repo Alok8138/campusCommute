@@ -4,6 +4,7 @@ const User = require("./src/model/signup.user")
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose");
 const { userAuth } = require("./src/middleware/auth")
 
 const authRouter = require("./src/routes/auth")
@@ -55,8 +56,31 @@ app.use("/", admintokenRoutes);
 
 
 connectDB()
-  .then(() => {
+  .then(async () => {
     console.log("connection sucessfull");
+    
+    // Clean up old indexes from previous schema
+    try {
+      const db = mongoose.connection.db;
+      if (db) {
+        const collection = db.collection("buspasses");
+        try {
+          await collection.dropIndex("srNo_1");
+          console.log("✓ Cleaned up old srNo_1 index");
+        } catch (e) {
+          // Index doesn't exist, that's fine
+        }
+        try {
+          await collection.dropIndex("regNo_1");
+          console.log("✓ Cleaned up old regNo_1 index");
+        } catch (e) {
+          // Index doesn't exist, that's fine
+        }
+      }
+    } catch (error) {
+      console.warn("Warning: Could not clean up indexes:", error.message);
+    }
+    
     app.listen(process.env.PORT, () => {
       console.log("port listen at 3000");
     });

@@ -2,9 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from "../utils/constants";
 
 
 const PassForm = ({

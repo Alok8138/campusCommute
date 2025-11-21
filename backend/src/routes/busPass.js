@@ -12,7 +12,7 @@ const fs = require("fs");
 
 
 
-busPassRouter.post('/submit-form', async (req, res) => {
+busPassRouter.post('/submit-form', userAuth, async (req, res) => {
   try {
       console.log(req.body);
      
@@ -49,11 +49,26 @@ busPassRouter.post('/submit-form', async (req, res) => {
         }
       }
      
-      const newApplication = new BusPass(req.body); // Create a new bus pass application
-      await newApplication.save(); // Save the application to the database
+      // Create bus pass application (without payment info - will be added after successful payment)
+      const applicationData = {
+        userId: req.user._id,
+        enrollmentNo: req.body.enrollmentNo,
+        name: req.body.name,
+        college: req.body.college,
+        branch: req.body.branch,
+        semester: req.body.semester,
+        stand: req.body.stand,
+        city: req.body.city,
+        paymentRef: null, // Will be populated after payment
+      };
 
+      const newApplication = new BusPass(applicationData);
+      await newApplication.save();
 
-      res.status(201).json({ message: "Form submitted successfully!" });
+      res.status(201).json({ 
+        message: "Form submitted successfully! Please complete payment.",
+        busPassId: newApplication._id
+      });
   } catch (error) {
       console.error('Error:', error);
 
@@ -309,7 +324,7 @@ busPassRouter.get("/download-bus-pass", userAuth, async (req, res) => {
         .text(displayValue, detailsX + labelWidth, y);
     }
     addField("Name:", busPassData.name || "N/A", detailsTop);
-    addField("Enrollment No:", busPassData.enrollmentNo || "N/A", detailsTop + 25);
+    addField("Enro. No:", busPassData.enrollmentNo || "N/A", detailsTop + 25);
     addField("College:", busPassData.college || "N/A", detailsTop + 50);
     addField("Branch:", busPassData.branch || "N/A", detailsTop + 75);
     addField("Semester:", busPassData.semester || "N/A", detailsTop + 100);
@@ -429,7 +444,7 @@ busPassRouter.get("/download-bus-pass", userAuth, async (req, res) => {
       doc
         .fontSize(10)
         .fillColor(colors.accent)
-        .text("Alok Patel", x, y + 15, { width: 130, align: "center" });
+        .text("campusCommute", x, y + 15, { width: 130, align: "center" });
       doc.restore();
     }
     drawSignature(410, footerY + 10);
@@ -578,12 +593,21 @@ busPassRouter.get("/pass/status", userAuth, async (req, res) => {
     }
 
 
+    // Only active if payment is completed
+    if (existingPass.paymentStatus !== 'completed') {
+      return res.json({ 
+        active: false,
+        hasApplication: true,
+        paymentStatus: existingPass.paymentStatus 
+      });
+    }
+
     // Use expiryDate from the pass if it exists, otherwise calculate it
     let expiryDate;
     if (existingPass.expiryDate) {
       expiryDate = new Date(existingPass.expiryDate);
     } else {
-      const issueDate = existingPass.createdAt || new Date();
+      const issueDate = existingPass.issueDate || existingPass.createdAt || new Date();
       expiryDate = new Date(issueDate);
       expiryDate.setDate(expiryDate.getDate() + 150);
     }
@@ -597,6 +621,7 @@ busPassRouter.get("/pass/status", userAuth, async (req, res) => {
       active: isActive,
       expiryDate: expiryDate.toISOString(),
       hasPass: true,
+      paymentStatus: existingPass.paymentStatus,
       details: existingPass,
     });
   } catch (err) {
