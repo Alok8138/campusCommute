@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose");
+const SystemConfig = require("./src/model/SystemConfig");
 const { userAuth } = require("./src/middleware/auth")
 
 const authRouter = require("./src/routes/auth")
@@ -79,6 +80,23 @@ connectDB()
       }
     } catch (error) {
       console.warn("Warning: Could not clean up indexes:", error.message);
+    }
+    
+    // Initialize default pass end date if not set (6 months from today)
+    try {
+      const existingConfig = await SystemConfig.findOne({ key: "passEndDate" });
+      if (!existingConfig) {
+        const defaultEndDate = new Date();
+        defaultEndDate.setMonth(defaultEndDate.getMonth() + 6); // 6 months from now
+        await SystemConfig.setConfig(
+          "passEndDate",
+          defaultEndDate.toISOString(),
+          "Pass end date - all bus passes will expire on this date regardless of when they were issued"
+        );
+        console.log(`✓ Initialized default pass end date: ${defaultEndDate.toLocaleDateString()}`);
+      }
+    } catch (error) {
+      console.warn("Warning: Could not initialize pass end date config:", error.message);
     }
     
     app.listen(process.env.PORT, () => {

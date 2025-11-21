@@ -9,6 +9,7 @@ const razorpayInstance = require("../util/razorpay");
 const Payment = require("../model/payment");
 const BusPass = require("../model/busPass");
 const User = require("../model/signup.user");
+const SystemConfig = require("../model/SystemConfig");
 const { userAuth } = require("../middleware/auth");
 
 
@@ -128,15 +129,24 @@ paymentRouter.post("/payment/success", userAuth, async (req, res) => {
 
     console.log("Found existing BusPass, updating with payment info...");
 
-    // Define duration (days). Use your desired validity period. In your code you used 150.
-    const VALIDITY_DAYS = 150;
-    const issueDate = new Date();
-    const expiryDate = addDays(issueDate, VALIDITY_DAYS);
+    // Get admin-set end date from system configuration
+    const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+    let expiryDate;
+    if (endDateStr) {
+      expiryDate = new Date(endDateStr);
+    } else {
+      // Fallback: if no end date is configured, use issue date + 180 days
+      const issueDate = busPass.issueDate || new Date();
+      expiryDate = addDays(issueDate, 180);
+    }
 
     // Update existing BusPass with payment info
     // Preserve existing college, branch, semester from form submission
+    // Issue date should already be set when form was submitted, but ensure it's set
+    if (!busPass.issueDate) {
+      busPass.issueDate = busPass.createdAt || new Date();
+    }
     busPass.paymentRef = paymentId;
-    busPass.issueDate = issueDate;
     busPass.expiryDate = expiryDate;
     busPass.paymentStatus = 'completed';
     busPass.updatedAt = new Date();

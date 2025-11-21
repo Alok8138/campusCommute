@@ -5,6 +5,7 @@ const Admin = require("../model/adminsignup");
 const bcrypt = require('bcrypt');
 const BusPass = require("../model/busPass")
 const CollegeDetails = require("../model/CollegeDetails");
+const SystemConfig = require("../model/SystemConfig");
 const { adminAuth } = require("../middleware/admin_auth");
 
 const SECRET_KEY = process.env.SECRET_KEY || "GOJO";
@@ -282,9 +283,6 @@ adminRouter.delete("/admin/deletebus/:id", adminAuth, async (req, res) => {
 });
 
 
-
-
-
 // Route to fetch student data
 adminRouter.get("/admin/getstudents", adminAuth, async (req, res) => {
   try {
@@ -379,6 +377,74 @@ adminRouter.get("/admin/getstudents", adminAuth, async (req, res) => {
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ message: "Error fetching students: " + error.message });
+  }
+});
+
+// Get pass end date configuration
+adminRouter.get("/admin/pass-end-date", adminAuth, async (req, res) => {
+  try {
+    const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+    let endDate = null;
+    if (endDateStr) {
+      endDate = new Date(endDateStr);
+    }
+    res.json({ 
+      endDate: endDate ? endDate.toISOString().split('T')[0] : null, // Return as YYYY-MM-DD
+      endDateFormatted: endDate ? endDate.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }) : null,
+      message: "Pass end date configuration retrieved successfully"
+    });
+  } catch (error) {
+    console.error("Error fetching pass end date:", error);
+    res.status(500).json({ message: "Error fetching pass end date: " + error.message });
+  }
+});
+
+// Update pass end date configuration
+adminRouter.put("/admin/pass-end-date", adminAuth, async (req, res) => {
+  try {
+    const { endDate } = req.body;
+
+    // Validate input
+    if (!endDate) {
+      return res.status(400).json({ message: "End date is required (format: YYYY-MM-DD)" });
+    }
+
+    const dateObj = new Date(endDate);
+    if (isNaN(dateObj.getTime())) {
+      return res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD" });
+    }
+
+    // Ensure the date is in the future
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (dateObj < today) {
+      return res.status(400).json({ message: "End date must be in the future" });
+    }
+
+    // Update or create the configuration
+    const config = await SystemConfig.setConfig(
+      "passEndDate",
+      dateObj.toISOString(),
+      "Pass end date - all bus passes will expire on this date regardless of when they were issued"
+    );
+
+    const savedDate = new Date(config.value);
+    res.json({ 
+      message: "Pass end date updated successfully",
+      endDate: savedDate.toISOString().split('T')[0],
+      endDateFormatted: savedDate.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    });
+  } catch (error) {
+    console.error("Error updating pass end date:", error);
+    res.status(500).json({ message: "Error updating pass end date: " + error.message });
   }
 });
 

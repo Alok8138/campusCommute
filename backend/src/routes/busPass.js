@@ -2,6 +2,7 @@ const express = require("express");
 const busPassRouter = express.Router();
 const BusPass = require("../model/busPass");
 const mongoose = require("mongoose");
+const SystemConfig = require("../model/SystemConfig");
 const { userAuth } = require("../middleware/auth");
 const PDFDocument = require("pdfkit");
 const path = require("path");
@@ -27,10 +28,16 @@ busPassRouter.post('/submit-form', userAuth, async (req, res) => {
           if (existingPass.expiryDate) {
             expiryDate = new Date(existingPass.expiryDate);
           } else {
-            // Calculate expiry date if not set (150 days from creation)
-            const issueDate = existingPass.createdAt || new Date();
-            expiryDate = new Date(issueDate);
-            expiryDate.setDate(expiryDate.getDate() + 150);
+            // Use admin-set end date if available
+            const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+            if (endDateStr) {
+              expiryDate = new Date(endDateStr);
+            } else {
+              // Fallback: use issue date + 180 days if no end date is configured
+              const issueDate = existingPass.issueDate || existingPass.createdAt || new Date();
+              expiryDate = new Date(issueDate);
+              expiryDate.setDate(expiryDate.getDate() + 180);
+            }
           }
          
           const now = new Date();
@@ -50,6 +57,9 @@ busPassRouter.post('/submit-form', userAuth, async (req, res) => {
       }
      
       // Create bus pass application (without payment info - will be added after successful payment)
+      // Set issue date to the date when form is submitted (or the date from form if provided)
+      const issueDate = req.body.date ? new Date(req.body.date) : new Date();
+      
       const applicationData = {
         userId: req.user._id,
         enrollmentNo: req.body.enrollmentNo,
@@ -59,6 +69,18 @@ busPassRouter.post('/submit-form', userAuth, async (req, res) => {
         semester: req.body.semester,
         stand: req.body.stand,
         city: req.body.city,
+        // Additional fields from form
+        regNo: req.body.regNo,
+        bloodGroup: req.body.bloodGroup,
+        phone: req.body.phone,
+        email: req.body.email,
+        address: req.body.address,
+        parentPhone: req.body.parentPhone,
+        note: req.body.note,
+        feeAmount: req.body.feeAmount,
+        date: issueDate,
+        shift: req.body.shift,
+        issueDate: issueDate, // Set issue date when form is submitted
         paymentRef: null, // Will be populated after payment
       };
 
@@ -122,8 +144,15 @@ busPassRouter.get("/download-bus-pass", userAuth, async (req, res) => {
     if (busPassData.expiryDate) {
       expiryDate = new Date(busPassData.expiryDate);
     } else {
-      expiryDate = new Date(issueDate);
-      expiryDate.setDate(expiryDate.getDate() + 150);
+      // Use admin-set end date if available
+      const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+      if (endDateStr) {
+        expiryDate = new Date(endDateStr);
+      } else {
+        // Fallback: use issue date + 180 days if no end date is configured
+        expiryDate = new Date(issueDate);
+        expiryDate.setDate(expiryDate.getDate() + 180);
+      }
     }
 
 
@@ -559,9 +588,17 @@ busPassRouter.get("/status", userAuth, async (req, res) => {
     }
 
 
-    const issueDate = existingPass.createdAt || new Date();
-    const expiryDate = new Date(issueDate);
-    expiryDate.setDate(expiryDate.getDate() + 150);
+    const issueDate = existingPass.issueDate || existingPass.createdAt || new Date();
+    // Use admin-set end date if available
+    const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+    let expiryDate;
+    if (endDateStr) {
+      expiryDate = new Date(endDateStr);
+    } else {
+      // Fallback: use issue date + 180 days if no end date is configured
+      expiryDate = new Date(issueDate);
+      expiryDate.setDate(expiryDate.getDate() + 180);
+    }
 
 
     const now = new Date();
@@ -608,8 +645,15 @@ busPassRouter.get("/pass/status", userAuth, async (req, res) => {
       expiryDate = new Date(existingPass.expiryDate);
     } else {
       const issueDate = existingPass.issueDate || existingPass.createdAt || new Date();
-      expiryDate = new Date(issueDate);
-      expiryDate.setDate(expiryDate.getDate() + 150);
+      // Use admin-set end date if available
+      const endDateStr = await SystemConfig.getConfig("passEndDate", null);
+      if (endDateStr) {
+        expiryDate = new Date(endDateStr);
+      } else {
+        // Fallback: use issue date + 180 days if no end date is configured
+        expiryDate = new Date(issueDate);
+        expiryDate.setDate(expiryDate.getDate() + 180);
+      }
     }
 
 

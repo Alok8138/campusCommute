@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const busPassSchema = new mongoose.Schema({
   // New simplified schema
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  enrollmentNo: { type: String, required: true, index: true }, // Changed from unique to index
+  enrollmentNo: { type: String, required: true,index:true}, // Changed from unique to index
   name: { type: String, required: true },
   college: { type: String },
   branch: { type: String },
@@ -35,7 +35,7 @@ const busPassSchema = new mongoose.Schema({
 });
 
 // Ensure indexes are properly set
-busPassSchema.index({ enrollmentNo: 1 });
+// busPassSchema.index({ enrollmentNo: 1 });
 
 module.exports = mongoose.model("BusPass", busPassSchema);
 
